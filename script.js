@@ -1,4 +1,37 @@
-// QWERTY Adjacency Map
+// --- THEME LOGIC ---
+const themeToggleBtn = document.getElementById('themeToggle');
+const htmlElement = document.documentElement;
+
+// Check Local Storage or System Preference
+const currentTheme = localStorage.getItem('theme') || 
+    (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+
+if (currentTheme === 'light') {
+    htmlElement.setAttribute('data-theme', 'light');
+    themeToggleBtn.textContent = '🌙'; // Show moon if currently light
+} else {
+    htmlElement.setAttribute('data-theme', 'dark');
+    themeToggleBtn.textContent = '☀️'; // Show sun if currently dark
+}
+
+themeToggleBtn.addEventListener('click', () => {
+    const isLight = htmlElement.getAttribute('data-theme') === 'light';
+    
+    if (isLight) {
+        // Switch to Dark
+        htmlElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+        themeToggleBtn.textContent = '☀️';
+    } else {
+        // Switch to Light
+        htmlElement.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+        themeToggleBtn.textContent = '🌙';
+    }
+});
+
+// --- TYPO LOGIC ---
+
 const keyboardNeighbors = {
     'q': '12wa', 'w': 'qase32', 'e': 'wsdr43', 'r': 'edft54', 't': 'rfgy65', 'y': 'tghu76', 'u': 'yhji87', 'i': 'ujko98', 'o': 'iklp09', 'p': 'ol[-0',
     'a': 'qwsz', 's': 'qweadzx', 'd': 'wersfxc', 'f': 'ertdgcv', 'g': 'rtyfhvb', 'h': 'tyugjbn', 'j': 'yuihkmn', 'k': 'uiojlm,', 'l': 'iopk;.,',
@@ -35,9 +68,6 @@ function addTypos(text, errorRate, forceLower) {
 
         // Execute Error
         if (errorType === 'neighbor') {
-            // We always look up using lowercase char, because our map is lowercase
-            // but we might need to decide case for the result later? 
-            // For now, neighbors return as defined in map (lowercase) which is realistic for misses.
             const lowerChar = char.toLowerCase();
             
             if (keyboardNeighbors[lowerChar]) {
