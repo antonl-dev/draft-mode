@@ -8,22 +8,20 @@ const currentTheme = localStorage.getItem('theme') ||
 
 if (currentTheme === 'light') {
     htmlElement.setAttribute('data-theme', 'light');
-    themeToggleBtn.textContent = '🌙'; // Show moon if currently light
+    themeToggleBtn.textContent = '🌙'; 
 } else {
     htmlElement.setAttribute('data-theme', 'dark');
-    themeToggleBtn.textContent = '☀️'; // Show sun if currently dark
+    themeToggleBtn.textContent = '☀️'; 
 }
 
 themeToggleBtn.addEventListener('click', () => {
     const isLight = htmlElement.getAttribute('data-theme') === 'light';
     
     if (isLight) {
-        // Switch to Dark
         htmlElement.setAttribute('data-theme', 'dark');
         localStorage.setItem('theme', 'dark');
         themeToggleBtn.textContent = '☀️';
     } else {
-        // Switch to Light
         htmlElement.setAttribute('data-theme', 'light');
         localStorage.setItem('theme', 'light');
         themeToggleBtn.textContent = '🌙';
@@ -112,7 +110,13 @@ const forceLowerInput = document.getElementById('forceLower');
 // Event Listeners
 generateBtn.addEventListener('click', () => {
     const text = inputText.value;
-    const rate = parseFloat(errorRateInput.value);
+    
+    // Convert percentage (3) to decimal (0.03)
+    let percentage = parseFloat(errorRateInput.value);
+    
+    // Safety check just in case
+    if (isNaN(percentage)) percentage = 3;
+    const rate = percentage / 100; 
     const forceLower = forceLowerInput.checked;
     
     if (!text) return;
